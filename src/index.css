@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream-50: #faf8f5;
+  --color-cream-100: #f4f0e9;
+
+  --color-amber-700: #b7813d;
+  --color-amber-800: #9a6b32;
+  --color-amber-900: #7a5628;
+
+  --color-teal-500: #3a9b94;
+
+  --font-serif: "Playfair Display", serif;
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  extend: {
+    backdropBlur: {
+      sm: '8px',
+    },
+  }
+
+}
