@@ -263,12 +263,12 @@ const FacebookCommerceSection = () => {
                   <p className="text-amber-800/80">Get real-time answers from our team</p>
                   <div className="mt-4 relative z-10">
             <a 
-              href="https://facebook.com/yourpage" 
+              href="https://m.me/yourpagename" 
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-6 py-3 bg-cream-50 hover:bg-white text-amber-800 rounded-lg font-medium shadow-md transition-all"
             >
-              Visit Our Facebook Page
+              Messenger
             </a>
           </div>
                 </div>
@@ -293,12 +293,12 @@ const FacebookCommerceSection = () => {
                   <p className="text-amber-800/80">Fast order processing and updates</p>
                   <div className="mt-4 relative z-10">
             <a 
-              href="https://facebook.com/yourpage" 
+              href="https://wa.me/yourphonenumber" 
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-6 py-3 bg-cream-50 hover:bg-white text-amber-800 rounded-lg font-medium shadow-md transition-all"
             >
-              Visit Our Facebook Page
+              WhatsApp
             </a>
           </div>
                 </div>
@@ -328,7 +328,7 @@ const FacebookCommerceSection = () => {
               rel="noopener noreferrer"
               className="inline-block px-6 py-3 bg-cream-50 hover:bg-white text-amber-800 rounded-lg font-medium shadow-md transition-all"
             >
-              Visit Our Facebook Page
+              Facebook Page
             </a>
           </div>
                 </div>

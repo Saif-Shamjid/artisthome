@@ -17,6 +17,7 @@ import ProductManager from "./ProductManager";
 import FeaturedCollectionManager from "./FeaturedCollectionManager";
 import OrderManager from "./OrderManager";
 import AnalyticsDashboard from "./AnalyticsDashboard";
+import Settings from "./Settings";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -40,6 +41,8 @@ const AdminDashboard = () => {
         return <OrderManager />;
       case "analytics":
         return <AnalyticsDashboard />;
+      case "settings":
+        return <Settings></Settings>;
       default:
         return <DashboardOverview />;
     }
