@@ -18,6 +18,7 @@ import FeaturedCollectionManager from "./FeaturedCollectionManager";
 import OrderManager from "./OrderManager";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 import Settings from "./Settings";
+import SocialMediaControls from "./SocialMediaControls";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -39,6 +40,8 @@ const AdminDashboard = () => {
         return <FeaturedCollectionManager />;
       case "orders":
         return <OrderManager />;
+      case "socialMedia":
+        return <SocialMediaControls />;
       case "analytics":
         return <AnalyticsDashboard />;
       case "settings":
@@ -96,6 +99,7 @@ const AdminDashboard = () => {
               { id: "products", icon: <FiShoppingCart />, label: "Products" },
               { id: "featured", icon: <FiGrid />, label: "Featured" },
               { id: "orders", icon: <FiUsers />, label: "Orders" },
+              { id: "socialMedia", icon: <FiGrid />, label: "socialMedia" },
               { id: "analytics", icon: <FiPieChart />, label: "Analytics" },
               { id: "settings", icon: <FiSettings />, label: "Settings" },
             ].map((item) => (
