@@ -1,8 +1,67 @@
 import { useState } from 'react';
-import { FiUser, FiShield, FiLock, FiTrash2, FiEdit, FiChevronDown, FiChevronUp, FiKey,FiEye  } from 'react-icons/fi';
+import { FiUser, FiShield, FiLock, FiTrash2, FiEdit, FiChevronDown, FiChevronUp, FiKey, FiEye, FiEyeOff } from 'react-icons/fi';
 
 const Moderators = () => {
-  // Moderators state
+  // Define granular permissions
+  const availablePermissions = [
+    { 
+      category: 'Products',
+      permissions: [
+        { id: 'products_view', label: 'View Products' },
+        { id: 'products_add', label: 'Add New Products' },
+        { id: 'products_edit', label: 'Edit Products' },
+        { id: 'products_delete', label: 'Delete Products' },
+        { id: 'products_inventory', label: 'Manage Inventory' },
+        { id: 'products_categories', label: 'Manage Categories' },
+      ]
+    },
+    { 
+      category: 'Orders',
+      permissions: [
+        { id: 'orders_view', label: 'View Orders' },
+        { id: 'orders_edit', label: 'Edit Orders' },
+        { id: 'orders_status', label: 'Change Order Status' },
+        { id: 'orders_fulfillment', label: 'Manage Fulfillment' },
+        { id: 'orders_refunds', label: 'Process Refunds' },
+      ]
+    },
+    { 
+      category: 'Customers',
+      permissions: [
+        { id: 'customers_view', label: 'View Customers' },
+        { id: 'customers_edit', label: 'Edit Customers' },
+        { id: 'customers_groups', label: 'Manage Groups' },
+        { id: 'customers_discounts', label: 'Manage Discounts' },
+      ]
+    },
+    { 
+      category: 'Analytics',
+      permissions: [
+        { id: 'analytics_view', label: 'View Analytics' },
+        { id: 'analytics_reports', label: 'Generate Reports' },
+        { id: 'analytics_export', label: 'Export Data' },
+      ]
+    },
+    { 
+      category: 'Content',
+      permissions: [
+        { id: 'content_pages', label: 'Manage Pages' },
+        { id: 'content_blog', label: 'Manage Blog' },
+        { id: 'content_media', label: 'Manage Media' },
+        { id: 'content_menu', label: 'Manage Menus' },
+      ]
+    },
+    { 
+      category: 'System',
+      permissions: [
+        { id: 'system_settings', label: 'View Settings' },
+        { id: 'system_moderators', label: 'Manage Moderators' },
+        { id: 'system_logs', label: 'View System Logs' },
+      ]
+    }
+  ];
+
+  // Sample moderators with permissions
   const [moderators, setModerators] = useState([
     {
       id: 1,
@@ -10,7 +69,13 @@ const Moderators = () => {
       email: "alex@example.com",
       accessLevel: "full",
       lastActive: "2 hours ago",
-      passwordSet: true
+      passwordSet: true,
+      permissions: availablePermissions.reduce((acc, group) => {
+        group.permissions.forEach(permission => {
+          acc[permission.id] = true;
+        });
+        return acc;
+      }, {})
     },
     {
       id: 2,
@@ -20,11 +85,20 @@ const Moderators = () => {
       lastActive: "1 day ago",
       passwordSet: true,
       permissions: {
-        manageProducts: false,
-        viewOrders: true,
-        manageCustomers: false,
-        viewAnalytics: true,
-        manageContent: false
+        products_view: true,
+        products_edit: true,
+        orders_view: true,
+        orders_status: true,
+        customers_view: true,
+        analytics_view: true,
+        ...availablePermissions.reduce((acc, group) => {
+          group.permissions.forEach(permission => {
+            if (!acc.hasOwnProperty(permission.id)) {
+              acc[permission.id] = false;
+            }
+          });
+          return acc;
+        }, {})
       }
     }
   ]);
@@ -38,13 +112,6 @@ const Moderators = () => {
     showPassword: false
   });
 
-  // Define permissions that can be restricted
-  const availablePermissions = [
-    { id: 'manageProducts', label: 'Manage Products' },
-    { id: 'viewOrders', label: 'View Orders' },
-  ];
-
-  // State for expanded moderator for permission editing
   const [expandedModerator, setExpandedModerator] = useState(null);
   const [resetPasswordFor, setResetPasswordFor] = useState(null);
   const [newPassword, setNewPassword] = useState('');
@@ -66,20 +133,24 @@ const Moderators = () => {
 
   const handleAddModerator = () => {
     if (newModerator.name && newModerator.email && newModerator.password && newModerator.password === newModerator.confirmPassword) {
+      const initialPermissions = {};
+      availablePermissions.forEach(group => {
+        group.permissions.forEach(permission => {
+          initialPermissions[permission.id] = newModerator.accessLevel === 'full';
+        });
+      });
+
       const moderator = {
         ...newModerator,
         id: Date.now(),
         lastActive: "Just now",
         passwordSet: true,
-        // Remove password fields from the stored moderator
         password: undefined,
         confirmPassword: undefined,
         showPassword: undefined,
-        // Initialize all permissions as false for restricted access
-        permissions: newModerator.accessLevel === 'full' 
-          ? availablePermissions.reduce((acc, perm) => ({ ...acc, [perm.id]: true }), {})
-          : availablePermissions.reduce((acc, perm) => ({ ...acc, [perm.id]: false }), {})
+        permissions: initialPermissions
       };
+      
       setModerators([...moderators, moderator]);
       setNewModerator({
         name: '',
@@ -99,13 +170,17 @@ const Moderators = () => {
   const handleUpdateAccess = (id, accessLevel) => {
     setModerators(moderators.map(mod => {
       if (mod.id === id) {
+        const updatedPermissions = availablePermissions.reduce((acc, group) => {
+          group.permissions.forEach(permission => {
+            acc[permission.id] = accessLevel === 'full' ? true : mod.permissions[permission.id];
+          });
+          return acc;
+        }, {});
+
         return {
           ...mod,
           accessLevel,
-          // If switching to full access, enable all permissions
-          permissions: accessLevel === 'full' 
-            ? availablePermissions.reduce((acc, perm) => ({ ...acc, [perm.id]: true }), {})
-            : mod.permissions
+          permissions: updatedPermissions
         };
       }
       return mod;
@@ -129,12 +204,12 @@ const Moderators = () => {
 
   const toggleExpandModerator = (moderatorId) => {
     setExpandedModerator(expandedModerator === moderatorId ? null : moderatorId);
-    setResetPasswordFor(null); // Close password reset if open
+    setResetPasswordFor(null);
   };
 
   const handleResetPassword = (moderatorId) => {
     setResetPasswordFor(resetPasswordFor === moderatorId ? null : moderatorId);
-    setExpandedModerator(null); // Close permissions if open
+    setExpandedModerator(null);
     setNewPassword('');
   };
 
@@ -352,19 +427,26 @@ const Moderators = () => {
                     <tr>
                       <td colSpan="5" className="px-4 py-4 bg-amber-50">
                         <h5 className="text-xs font-medium text-amber-800 mb-3">Restricted Access Permissions</h5>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                          {availablePermissions.map(permission => (
-                            <div key={permission.id} className="flex items-center">
-                              <input
-                                type="checkbox"
-                                id={`${moderator.id}-${permission.id}`}
-                                checked={moderator.permissions[permission.id]}
-                                onChange={() => togglePermission(moderator.id, permission.id)}
-                                className="h-4 w-4 text-amber-700 border-amber-300 rounded focus:ring-amber-500"
-                              />
-                              <label htmlFor={`${moderator.id}-${permission.id}`} className="ml-2 text-sm text-amber-800">
-                                {permission.label}
-                              </label>
+                        <div className="space-y-6">
+                          {availablePermissions.map(group => (
+                            <div key={group.category}>
+                              <h6 className="text-xs font-medium text-amber-700 mb-2">{group.category}</h6>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {group.permissions.map(permission => (
+                                  <div key={permission.id} className="flex items-center">
+                                    <input
+                                      type="checkbox"
+                                      id={`${moderator.id}-${permission.id}`}
+                                      checked={moderator.permissions[permission.id]}
+                                      onChange={() => togglePermission(moderator.id, permission.id)}
+                                      className="h-4 w-4 text-amber-700 border-amber-300 rounded focus:ring-amber-500"
+                                    />
+                                    <label htmlFor={`${moderator.id}-${permission.id}`} className="ml-2 text-sm text-amber-800">
+                                      {permission.label}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           ))}
                         </div>
