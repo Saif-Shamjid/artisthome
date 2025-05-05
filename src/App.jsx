@@ -10,13 +10,13 @@ import Navbar from "./components/NavBar";
 function App() {
   return (
     <>
-      <Navbar></Navbar>
+      
       <HeroSection></HeroSection>
       <CategorySection></CategorySection>
       <FeaturedCollection></FeaturedCollection>
       <CustomOrdersSection></CustomOrdersSection>
       <FacebookCommerceSection></FacebookCommerceSection>
-      <ArtisanFooter></ArtisanFooter>
+      
     </>
   );
 }

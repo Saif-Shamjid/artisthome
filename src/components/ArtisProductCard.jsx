@@ -234,7 +234,7 @@ const ArtisProductCard = ({ images, title, description, price, isNew = false }) 
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  <span className="relative text-[8px] lg:text-[14px]  z-10 flex items-center">
+                  <span className="relative text-[8px] lg:text-[11px]  z-10 flex items-center">
                     <FiShoppingBag size={14} className="mr-2" />
                     Add to Cart
                   </span>

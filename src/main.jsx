@@ -12,37 +12,56 @@ import CheckoutPage from './components/CheckoutPage.jsx';
 import AllProductsPage from './components/AllProducts.jsx';
 import AdminDashboard from './components/AdminPanel/AdminDashboard.jsx';
 import UserProfilePage from './components/UserProfilePage.jsx';
+import Login from './components/Login.jsx';
+import Signup from './components/Signup.jsx';
+import { AuthProvider } from './contex/AuthContex.jsx';
+import Layout from './components/Layout.jsx';
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App></App>,
-  },
-  {
-    path: "/details",
-    element: <ProductDetailPage></ProductDetailPage>,
-  },
-  {
-    path: "/checkout",
-    element: <CheckoutPage></CheckoutPage>,
-  },
-  {
-    path: "/products",
-    element: <AllProductsPage></AllProductsPage>,
-  },
-  {
-    path: "/admin",
-    element: <AdminDashboard></AdminDashboard>,
-  },
-  {
-    path:"/user",
-    element: <UserProfilePage></UserProfilePage>,
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <App />,
+      },
+      {
+        path: "/details/:id", // Added parameter for product ID
+        element: <ProductDetailPage />,
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
+      },
+      {
+        path: "/products",
+        element: <AllProductsPage />,
+      },
+      {
+        path: "/admin",
+        element: <AdminDashboard />,
+      },
+      {
+        path: "/user",
+        element: <UserProfilePage />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      }
+    ]
   }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    
     <RouterProvider router={router} />
     
   </StrictMode>,

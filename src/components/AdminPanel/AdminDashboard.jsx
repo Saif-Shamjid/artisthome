@@ -19,6 +19,8 @@ import OrderManager from "./OrderManager";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 import Settings from "./Settings";
 import SocialMediaControls from "./SocialMediaControls";
+import AdminOrderManager from "./AdminOrderManager";
+import CustomOrderManager from "./CustomOrderManager";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -40,6 +42,10 @@ const AdminDashboard = () => {
         return <FeaturedCollectionManager />;
       case "orders":
         return <OrderManager />;
+      case "orderManager":
+        return <AdminOrderManager/>;
+      case "customOrderManager":
+        return <CustomOrderManager/>;
       case "socialMedia":
         return <SocialMediaControls />;
       case "analytics":
@@ -99,6 +105,8 @@ const AdminDashboard = () => {
               { id: "products", icon: <FiShoppingCart />, label: "Products" },
               { id: "featured", icon: <FiGrid />, label: "Featured" },
               { id: "orders", icon: <FiUsers />, label: "Orders" },
+              { id: "orderManager", icon: <FiUsers />, label: "Order Manager" },
+              { id: "customOrderManager", icon: <FiUsers />, label: "Custom Order Manager" },
               { id: "socialMedia", icon: <FiGrid />, label: "socialMedia" },
               { id: "analytics", icon: <FiPieChart />, label: "Analytics" },
               { id: "settings", icon: <FiSettings />, label: "Settings" },
